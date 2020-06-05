@@ -10,309 +10,196 @@
         <header id="banner" class="body">
                 <h1><a href="/">Sifting </a></h1>
                 <nav><ul>
-                    <li><a href="/">Projects</a></li>
-                    <li><a href="/category/snippets.html">Snippets</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/projects.html">Projects</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/adpcm-decoder.html">ADPCM Decoder</a></h1>
+                    <h1 class="entry-title"><a href="/leet-and-orange.html">Leet and Orange</a></h1>
 <footer class="post-info">
-        <abbr class="published" title="3003-03-03T00:00:00+01:00">
-                Published: Thu 03 March 3003
+        <abbr class="published" title="3000-12-01T00:00:00+01:00">
+                Published: Mon 01 December 3000
         </abbr>
 
         <address class="vcard author">
                 By                         <a class="url fn" href="/author/sifting.html">Sifting</a>
         </address>
-<p>In <a href="/category/snippets.html">Snippets</a>.</p>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
 
-</footer><!-- /.post-info --><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
-  2
-  3
-  4
-  5
-  6
-  7
-  8
-  9
- 10
- 11
- 12
- 13
- 14
- 15
- 16
- 17
- 18
- 19
- 20
- 21
- 22
- 23
- 24
- 25
- 26
- 27
- 28
- 29
- 30
- 31
- 32
- 33
- 34
- 35
- 36
- 37
- 38
- 39
- 40
- 41
- 42
- 43
- 44
- 45
- 46
- 47
- 48
- 49
- 50
- 51
- 52
- 53
- 54
- 55
- 56
- 57
- 58
- 59
- 60
- 61
- 62
- 63
- 64
- 65
- 66
- 67
- 68
- 69
- 70
- 71
- 72
- 73
- 74
- 75
- 76
- 77
- 78
- 79
- 80
- 81
- 82
- 83
- 84
- 85
- 86
- 87
- 88
- 89
- 90
- 91
- 92
- 93
- 94
- 95
- 96
- 97
- 98
- 99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="cp">#define IMA_STEP_LEN 89</span>
-<span class="k">struct</span> <span class="n">ADPCM_chan</span>
-<span class="p">{</span>
-    <span class="kt">int32_t</span> <span class="n">pred</span><span class="p">;</span>
-    <span class="kt">int32_t</span> <span class="n">ndx</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">static</span> <span class="kr">inline</span> <span class="kt">int16_t</span>
-<span class="nf">adpcm_expand</span> <span class="p">(</span><span class="k">struct</span> <span class="n">ADPCM_chan</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">chan</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">nibble</span><span class="p">)</span>
-<span class="p">{</span>   <span class="cm">/*http://www.cs.columbia.edu/~hgs/audio/dvi/IMA_ADPCM.pdf*/</span>
-    <span class="k">static</span> <span class="kt">int8_t</span> <span class="n">ima_index_table</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span>
-    <span class="p">{</span>
-        <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span>
-    <span class="p">};</span>
-    <span class="k">static</span> <span class="kt">int16_t</span> <span class="n">ima_step_table</span><span class="p">[</span><span class="n">IMA_STEP_LEN</span><span class="p">]</span> <span class="o">=</span>
-    <span class="p">{</span> 
-        <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> 
-        <span class="mi">19</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> 
-        <span class="mi">50</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">107</span><span class="p">,</span> <span class="mi">118</span><span class="p">,</span> 
-        <span class="mi">130</span><span class="p">,</span> <span class="mi">143</span><span class="p">,</span> <span class="mi">157</span><span class="p">,</span> <span class="mi">173</span><span class="p">,</span> <span class="mi">190</span><span class="p">,</span> <span class="mi">209</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">253</span><span class="p">,</span> <span class="mi">279</span><span class="p">,</span> <span class="mi">307</span><span class="p">,</span>
-        <span class="mi">337</span><span class="p">,</span> <span class="mi">371</span><span class="p">,</span> <span class="mi">408</span><span class="p">,</span> <span class="mi">449</span><span class="p">,</span> <span class="mi">494</span><span class="p">,</span> <span class="mi">544</span><span class="p">,</span> <span class="mi">598</span><span class="p">,</span> <span class="mi">658</span><span class="p">,</span> <span class="mi">724</span><span class="p">,</span> <span class="mi">796</span><span class="p">,</span>
-        <span class="mi">876</span><span class="p">,</span> <span class="mi">963</span><span class="p">,</span> <span class="mi">1060</span><span class="p">,</span> <span class="mi">1166</span><span class="p">,</span> <span class="mi">1282</span><span class="p">,</span> <span class="mi">1411</span><span class="p">,</span> <span class="mi">1552</span><span class="p">,</span> <span class="mi">1707</span><span class="p">,</span> <span class="mi">1878</span><span class="p">,</span> <span class="mi">2066</span><span class="p">,</span> 
-        <span class="mi">2272</span><span class="p">,</span> <span class="mi">2499</span><span class="p">,</span> <span class="mi">2749</span><span class="p">,</span> <span class="mi">3024</span><span class="p">,</span> <span class="mi">3327</span><span class="p">,</span> <span class="mi">3660</span><span class="p">,</span> <span class="mi">4026</span><span class="p">,</span> <span class="mi">4428</span><span class="p">,</span> <span class="mi">4871</span><span class="p">,</span> <span class="mi">5358</span><span class="p">,</span>
-        <span class="mi">5894</span><span class="p">,</span> <span class="mi">6484</span><span class="p">,</span> <span class="mi">7132</span><span class="p">,</span> <span class="mi">7845</span><span class="p">,</span> <span class="mi">8630</span><span class="p">,</span> <span class="mi">9493</span><span class="p">,</span> <span class="mi">10442</span><span class="p">,</span> <span class="mi">11487</span><span class="p">,</span> <span class="mi">12635</span><span class="p">,</span> <span class="mi">13899</span><span class="p">,</span> 
-        <span class="mi">15289</span><span class="p">,</span> <span class="mi">16818</span><span class="p">,</span> <span class="mi">18500</span><span class="p">,</span> <span class="mi">20350</span><span class="p">,</span> <span class="mi">22385</span><span class="p">,</span> <span class="mi">24623</span><span class="p">,</span> <span class="mi">27086</span><span class="p">,</span> <span class="mi">29794</span><span class="p">,</span> <span class="mi">32767</span> 
-    <span class="p">};</span>
-    <span class="cm">/*To recover the 16 bit sample we must do:</span>
-<span class="cm">        for each nibble: </span>
-<span class="cm">            delta = step*(nibble + 1/2)/4 </span>
-
-<span class="cm">    ...which is unfortunate left as is. However, if we expand some terms</span>
-<span class="cm">    like so:</span>
-
-<span class="cm">        step*(nibble + 1/2)/4 -&gt; (step*nibble + step/2)/4 -&gt;</span>
-<span class="cm">        step*nibble/4 + step/8</span>
-
-<span class="cm">    ...then all of a sudden we&#39;re dividing by nice powers of two. now,</span>
-<span class="cm">    since there are only 4 bits of info, and one of them is dedicated to</span>
-<span class="cm">    sign, that leaves only 3 bits of data. If we apply the function:</span>
-
-<span class="cm">        f(x) = step*x/4</span>
-
-<span class="cm">    ...for each bit set (b111 = 4|2|1) it expands to:</span>
-
-<span class="cm">        f(4) + f(2) + f(1) -&gt; 4*step/4 + 2*step/4 + 1*step/4 -&gt; </span>
-<span class="cm">        step + step/2 + step/4</span>
-
-<span class="cm">    ...which means we can do the multiplication through repeated addition.</span>
-
-<span class="cm">    cool.</span>
-<span class="cm">    */</span>
-    <span class="kt">int32_t</span> <span class="n">delta</span><span class="p">;</span>
-    <span class="kt">int32_t</span> <span class="n">step</span><span class="p">;</span>
-    <span class="cm">/*Load the step*/</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">chan</span><span class="o">-&gt;</span><span class="n">ndx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">chan</span><span class="o">-&gt;</span><span class="n">ndx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">chan</span><span class="o">-&gt;</span><span class="n">ndx</span> <span class="o">&gt;=</span> <span class="n">IMA_STEP_LEN</span><span class="p">)</span> <span class="n">chan</span><span class="o">-&gt;</span><span class="n">ndx</span> <span class="o">=</span> <span class="n">IMA_STEP_LEN</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="n">step</span> <span class="o">=</span> <span class="n">ima_step_table</span><span class="p">[</span><span class="n">chan</span><span class="o">-&gt;</span><span class="n">ndx</span><span class="p">];</span>
-    <span class="n">chan</span><span class="o">-&gt;</span><span class="n">ndx</span> <span class="o">+=</span> <span class="n">ima_index_table</span><span class="p">[</span><span class="n">nibble</span><span class="o">&amp;</span><span class="mi">7</span><span class="p">];</span>
-    <span class="cm">/*Recover the delta value*/</span>
-<span class="cp">#if 0</span><span class="c"></span>
-<span class="c">    /*Reference implementation. Has precision issues. Don&#39;t use ever.*/</span>
-<span class="c">    delta = step&gt;&gt;3;                /*step/8 (= 1/2 in org. eq.)*/</span>
-<span class="c">    if (nibble&amp;1) delta += step&gt;&gt;2; /*step/4*/</span>
-<span class="c">    if (nibble&amp;2) delta += step&gt;&gt;1; /*step/2*/</span>
-<span class="c">    if (nibble&amp;4) delta += step;    /*step*/</span>
-<span class="cp">#elif 0 </span>
-    <span class="cm">/*Improved version, uses fixed point to achieve parity with the</span>
-<span class="cm">    reference. This version may work better on ARM style cpus where</span>
-<span class="cm">    every instruction has an implicit condition*/</span>
-    <span class="n">delta</span> <span class="o">=</span> <span class="n">step</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">;</span>                <span class="cm">/*step/2 (= 1/2 in org. eq.)*/</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">nibble</span><span class="o">&amp;</span><span class="mi">1</span><span class="p">)</span> <span class="n">delta</span> <span class="o">+=</span> <span class="n">step</span><span class="p">;</span>    <span class="cm">/*step*/</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">nibble</span><span class="o">&amp;</span><span class="mi">2</span><span class="p">)</span> <span class="n">delta</span> <span class="o">+=</span> <span class="n">step</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">;</span> <span class="cm">/*step*2*/</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">nibble</span><span class="o">&amp;</span><span class="mi">4</span><span class="p">)</span> <span class="n">delta</span> <span class="o">+=</span> <span class="n">step</span><span class="o">&lt;&lt;</span><span class="mi">2</span><span class="p">;</span> <span class="cm">/*step*4*/</span>
-    <span class="n">delta</span> <span class="o">&gt;&gt;=</span> <span class="mi">2</span><span class="p">;</span>                    <span class="cm">/*shift out fractional bits*/</span>
-<span class="cp">#elif 0</span>
-    <span class="cm">/*Same as above, but with the branches eliminated through some bit tricks.</span>
-<span class="cm">    Probably suboptimal on most modern machines, but could be great on cpus</span>
-<span class="cm">    with expensive branching and multiplication*/</span>
-<span class="cp">#define STEP(x, shift) do {</span>
-        <span class="k">register</span> <span class="kt">uint8_t</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
-        <span class="n">delta</span> <span class="o">+=</span> <span class="p">(</span><span class="n">step</span><span class="o">&amp;</span><span class="p">((</span><span class="n">tmp</span><span class="o">&lt;&lt;</span><span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="n">tmp</span><span class="p">))</span><span class="o">&lt;&lt;</span><span class="n">shift</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="n">delta</span> <span class="o">=</span> <span class="n">step</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">;</span>                <span class="cm">/*step/2 (= 1/2 in org. eq.)*/</span>
-    <span class="n">STEP</span><span class="p">(</span><span class="n">nibble</span><span class="o">&amp;</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>              <span class="cm">/*step*/</span>
-    <span class="n">STEP</span><span class="p">(</span><span class="n">nibble</span><span class="o">&amp;</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>              <span class="cm">/*step*2*/</span>
-    <span class="n">STEP</span><span class="p">(</span><span class="n">nibble</span><span class="o">&amp;</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>              <span class="cm">/*step*4*/</span>
-    <span class="n">delta</span> <span class="o">&gt;&gt;=</span> <span class="mi">2</span><span class="p">;</span>                    <span class="cm">/*shift out fractional bits*/</span>
-<span class="cp">#undef STEP</span>
-<span class="cp">#else</span>
-    <span class="cm">/*This version is best on modern cpus*/</span>
-    <span class="n">delta</span> <span class="o">=</span> <span class="n">step</span><span class="o">*</span><span class="p">(</span><span class="n">nibble</span><span class="o">&amp;</span><span class="mi">7</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">step</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">);</span>
-    <span class="n">delta</span> <span class="o">&gt;&gt;=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="cp">#endif</span>
-    <span class="cm">/*Update predicted value and saturate*/</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">nibble</span><span class="o">&amp;</span><span class="mi">8</span><span class="p">)</span> <span class="n">chan</span><span class="o">-&gt;</span><span class="n">pred</span> <span class="o">-=</span> <span class="n">delta</span><span class="p">;</span>
-    <span class="k">else</span> <span class="n">chan</span><span class="o">-&gt;</span><span class="n">pred</span> <span class="o">+=</span> <span class="n">delta</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">chan</span><span class="o">-&gt;</span><span class="n">pred</span> <span class="o">&gt;</span> <span class="n">INT16_MAX</span><span class="p">)</span> <span class="n">chan</span><span class="o">-&gt;</span><span class="n">pred</span> <span class="o">=</span> <span class="n">INT16_MAX</span><span class="p">;</span>
-    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">chan</span><span class="o">-&gt;</span><span class="n">pred</span> <span class="o">&lt;</span> <span class="n">INT16_MIN</span><span class="p">)</span> <span class="n">chan</span><span class="o">-&gt;</span><span class="n">pred</span> <span class="o">=</span> <span class="n">INT16_MIN</span><span class="p">;</span>
-    <span class="cm">/*The predicted value is now the uncompressed sample*/</span>
-    <span class="k">return</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">chan</span><span class="o">-&gt;</span><span class="n">pred</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">static</span> <span class="kt">void</span>
-<span class="n">adpcm_decode</span> <span class="p">(</span><span class="kt">int16_t</span> <span class="o">*</span><span class="n">res</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">chans</span><span class="p">)</span>
-<span class="p">{</span>   <span class="cm">/*Initialise local state*/</span>
-    <span class="kt">uint16_t</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">struct</span> <span class="n">ADPCM_chan</span> <span class="n">cs</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">chans</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span><span class="cm">/*First each channel has a 4 byte header at the start of the block.</span>
-<span class="cm">    The first two bytes are the initial sample, followed by a byte index then</span>
-<span class="cm">    a null padding byte. NB: the output takes the initial sample!*/</span>
-        <span class="n">cs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pred</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">int16_t</span> <span class="o">*</span><span class="p">)</span><span class="n">data</span><span class="p">;</span>
-        <span class="n">cs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ndx</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-        <span class="n">data</span> <span class="o">+=</span> <span class="mi">4</span><span class="p">;</span>
-        <span class="n">size</span> <span class="o">-=</span> <span class="mi">4</span><span class="p">;</span>
-        <span class="n">res</span><span class="o">++</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="cm">/*Recover the samples from the coded block. Like PCM samples are</span>
-<span class="cm">    interleaved, but unlike PCM the samples are interleaved in groups of 8.</span>
-<span class="cm">    So first 8 samples are left, then the next 8 are right. Very annoying.*/</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">size</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">uint8_t</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">chans</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">uint32_t</span> <span class="n">stride</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-            <span class="p">{</span><span class="cm">/*Expand each group of samples. 8 samples = 4 bytes.*/</span>
-                <span class="kt">uint8_t</span> <span class="n">nibble</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-                <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">res</span><span class="p">[</span><span class="n">stride</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">adpcm_expand</span> <span class="p">(</span><span class="n">cs</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">nibble</span><span class="p">);</span>
-                    <span class="n">stride</span> <span class="o">+=</span> <span class="n">chans</span><span class="p">;</span>
-                    <span class="n">nibble</span> <span class="o">&gt;&gt;=</span> <span class="mi">4</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-            <span class="n">size</span> <span class="o">-=</span> <span class="mi">4</span><span class="p">;</span>
-            <span class="n">data</span> <span class="o">+=</span> <span class="mi">4</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="cm">/*Bump output up by 8 samples for each channel*/</span>
-        <span class="n">res</span> <span class="o">+=</span> <span class="n">chans</span><span class="o">&lt;&lt;</span><span class="mi">3</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</td></tr></table>                </article>
+</footer><!-- /.post-info --><p>I really like Anarchy Online. There's a bit of an archival subculture in the 
+community - it's an old game now, with <em>a lot</em> of history behind it - complete
+with a <a href="https://gitlab.com/AOvault/AOvault">community archive</a> that keeps track of everything from CD images to 
+screenshots. As I browsed through the files, it had me thinking about what 
+would happen when the game went offline - all the unique areas and characters 
+and music and everything would be in effect lost. So I opened my hex editor and fired up 
+<a href="https://www.hex-rays.com/">IDA</a>. I'm happy to say that since then almost all of the 
+assets and their file formats have been reverse engineered and documented, the 
+results of which can be seen below. I decided to call this project Leet, 
+after a fan favourite character in the game.</p>
+<p><a href="/data/leet.mp4">An equiped character, showing off some new armour</a></p>
+<p><a href="/data/leet2.mp4">The new Aztur model for the RK2019 server</a></p>
+<p>After figuring out most of the assets, it occured to me how cool it would be to
+put together an interactive demo. If anything, it would give me a chance
+to put MiST, a library that I wrote in C, containing wealth of neat things, 
+including a thread module that implements something akin to C# style tasks - 
+to good use! You can see the results of that effort here:</p>
+<p><a href="/data/orange.mp4">Running around</a></p>
+<p><a href="/data/orange2.mp4">Showing off some camera controls</a></p>
+<p>It was quite an effort putting it all together. In order to just playback the 
+animations alone I had to write a whole new animation system from the ground up, but
+the results are quite good I feel, given it supports a modern feature set. Indeed, 
+the whole project runs on wholly original technology, from graphics down to 
+the configuration parser. I initially toyed with the idea of reading all of 
+the assets from the game's resource database, but opted against it, reasoning 
+that it would be better to preprocess all of the assets into original new formats, 
+both out of concern for Anarchy Online, and to make implementing the 
+new systems easier. I ended up calling this new effort Orange to set it apart
+from Leet proper.</p>
+<p>It was all in all very worth while, being full of new experiences and interesting
+stories to tell.</p>                </article>
             </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/transhuman.html" rel="bookmark"
+                           title="Permalink to Transhuman">Transhuman</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="3000-11-01T00:00:00+01:00">
+                Published: Sat 01 November 3000
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/sifting.html">Sifting</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I love a <a href="https://en.wikipedia.org/wiki/MUD">MUD</a>, in particular <a href="https://www.play.net/dr/">Dragon Realms</a>. 
+The depth and potential for immersive  experiences in these games cannot be overstated.
+So it was, more or less on a whim, that I ended up playing around with the idea of 
+writing my own. While there is a glut of high …</p>
+                <a class="readmore" href="/transhuman.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/traum.html" rel="bookmark"
+                           title="Permalink to Traum">Traum</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="3000-07-01T00:00:00+01:00">
+                Published: Tue 01 July 3000
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/sifting.html">Sifting</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Back in late 2019 I was talking with a friend and we got the idea to put 
+together a little demo for the <a href="https://en.wikipedia.org/wiki/Dreamcast">Sega Dreamcast</a>. A month later, Traum came into
+the world. See for yourself below!</p>
+<p><a href="/data/timelapse.mp4">Time lapse</a></p>
+<p><a href="/data/explore.mp4">Exploration</a></p>
+<p><a href="/data/sunrise.mp4">Sunrise</a></p>
+<p>I wrote Traum from the ground up to be …</p>
+                <a class="readmore" href="/traum.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/triangle-soup-or-how-do-i-eat-it.html" rel="bookmark"
+                           title="Permalink to Triangle Soup, or, how do I eat it?">Triangle Soup, or, how do I eat it?</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="3000-06-03T00:00:00+01:00">
+                Published: Tue 03 June 3000
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/sifting.html">Sifting</a>
+        </address>
+<p>In <a href="/category/articles.html">Articles</a>.</p>
+
+</footer><!-- /.post-info -->                <p>I have a fascination with old 3D stuff. Games, applications, you name it, it's all exciting! I had a thing for level editors in particular. I remember looking over the <a href="https://github.com/id-Software/Quake-Tools">source code</a> for the old qtools release and marveling - while taking notes - on how they made it  all work, when …</p>
+                <a class="readmore" href="/triangle-soup-or-how-do-i-eat-it.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/double-action.html" rel="bookmark"
+                           title="Permalink to Double Action">Double Action</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="3000-03-01T00:00:00+01:00">
+                Published: Sat 01 March 3000
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/sifting.html">Sifting</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>Around 2013 a friend shared an article to our group. It about this new Source
+game called Double Action, and billed it as the successor to The Specialists,
+an amazing Half-Life modification. I was instantly sold, and before I knew it
+I was writing player physics and game logic!</p>
+<p>The …</p>
+                <a class="readmore" href="/double-action.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/star-cannon-invasion-formation.html" rel="bookmark"
+                           title="Permalink to Star Cannon: Invasion Formation">Star Cannon: Invasion Formation</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="3000-01-01T00:00:00+01:00">
+                Published: Wed 01 January 3000
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/sifting.html">Sifting</a>
+        </address>
+<p>In <a href="/category/projects.html">Projects</a>.</p>
+
+</footer><!-- /.post-info -->                <p>In March of 2009 a friend sent a message to me, explaining that they were working
+on a game for a competition, that they needed an audio and file system, and
+that the deadline was in three days. Of course, I agreed to help!
+Less than twenty four hours later …</p>
+                <a class="readmore" href="/star-cannon-invasion-formation.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
         <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://github.com/sifting">Github</a></li>
+                        </ul>
+                </div><!-- /.social -->
         </section><!-- /#extras -->
 
         <footer id="contentinfo" class="body">
